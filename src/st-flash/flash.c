@@ -67,6 +67,8 @@ int main(int ac, char** av) {
 
     if (sl == NULL) { return(-1); }
 
+    sl->dual_bank = o.dual_bank;
+
     if (sl->flash_type == STLINK_FLASH_TYPE_UNKNOWN) {
         printf("Failed to connect to target\n");
         goto on_error;

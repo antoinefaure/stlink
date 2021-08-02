@@ -2677,7 +2677,7 @@ uint32_t calculate_F4_sectornum(uint32_t flashaddr) {
   }
 }
 
-uint32_t calculate_F7_sectornum(uint32_t flashaddr) {
+uint32_t calculate_F7_sectornum_old(uint32_t flashaddr) {
   flashaddr &= ~STM32_FLASH_BASE; // Page now holding the actual flash address
 
   if (flashaddr < 0x20000) {
@@ -2724,7 +2724,91 @@ uint32_t calculate_L4_page(stlink_t *sl, uint32_t flashaddr) {
   return (bker | flashaddr / (uint32_t)sl->flash_pgsz);
 }
 
+    /*
+     * See aplication note AN4826 STM32F7 Series Flash memory dual bank mode pp 18
+     */
+
+struct sectors_f7
+{
+    int sector;
+    uint32_t base;
+    uint32_t size;
+};
+
+static const struct sectors_f7 f7_single[] = {
+    {   0, 0x08000000, 0x8000 },
+    {   1, 0x08008000, 0x8000 },
+    {   2, 0x08010000, 0x8000 },
+    {   3, 0x08018000, 0x8000 },
+    {   4, 0x08020000, 0x20000 },
+    {   5, 0x08040000, 0x40000 },
+    {   6, 0x08080000, 0x40000 },
+    {   7, 0x080C0000, 0x40000 },
+    {   0, 0, 0 },
+};
+
+static const struct sectors_f7 f7_dual[] = {
+    {    0, 0x08000000, 0x4000 },
+    {    1, 0x08004000, 0x4000 },
+    {    2, 0x08008000, 0x4000 },
+    {    3, 0x0800C000, 0x4000 },
+    {    4, 0x08010000, 0x10000 },
+    {    5, 0x08020000, 0x20000 },
+    {    6, 0x08040000, 0x20000 },
+    {    7, 0x08060000, 0x20000 },
+    {    8, 0x08080000, 0x20000 },
+    {    9, 0x080A0000, 0x20000 },
+    {   10, 0x080C0000, 0x20000 },
+    {   11, 0x080E0000, 0x20000 },
+    {   12, 0x08100000, 0x4000 },
+    {   13, 0x08104000, 0x4000 },
+    {   14, 0x08108000, 0x4000 },
+    {   15, 0x0810C000, 0x4000 },
+    {   16, 0x08110000, 0x10000 },
+    {   17, 0x08120000, 0x20000 },
+    {   18, 0x08140000, 0x20000 },
+    {   19, 0x08160000, 0x20000 },
+    {   20, 0x08180000, 0x20000 },
+    {   21, 0x081A0000, 0x20000 },
+    {   22, 0x081C0000, 0x20000 },
+    {   23, 0x081E0000, 0x20000 },
+    {   0, 0, 0 },
+};
+
+static const struct sectors_f7 *get_f7_info(stlink_t *sl)
+{
+    return sl->dual_bank ? f7_dual : f7_single;
+}
+
+static const struct sectors_f7 *find_sector(stlink_t *sl, uint32_t flashaddr)
+{
+  for (const struct sectors_f7 *s = get_f7_info(sl); s->base; s++)
+  {
+      const uint32_t end = s->base + s->size;
+      if ((s->base <= flashaddr) && (flashaddr < end))
+      {
+          return s;
+      }
+  }
+  fprintf(stderr, "Bad address %#x\n", flashaddr);
+  exit(0);
+}
+
+uint32_t calculate_F7_sectornum(stlink_t *sl, uint32_t flashaddr) {
+  if (sl->chip_id == STLINK_CHIPID_STM32_F76xxx) {
+      const struct sectors_f7 *s = find_sector(sl, flashaddr);
+      return s->sector;
+  }
+  return calculate_F7_sectornum_old(flashaddr);
+}
+
 uint32_t stlink_calculate_pagesize(stlink_t *sl, uint32_t flashaddr) {
+
+  if (sl->chip_id == STLINK_CHIPID_STM32_F76xxx) {
+      const struct sectors_f7 *s = find_sector(sl, flashaddr);
+      return s->size;
+  } 
+
   if ((sl->chip_id == STLINK_CHIPID_STM32_F2) ||
       (sl->chip_id == STLINK_CHIPID_STM32_F4) ||
       (sl->chip_id == STLINK_CHIPID_STM32_F4_DE) ||
@@ -2750,7 +2834,7 @@ uint32_t stlink_calculate_pagesize(stlink_t *sl, uint32_t flashaddr) {
     }
   } else if (sl->chip_id == STLINK_CHIPID_STM32_F7 ||
              sl->chip_id == STLINK_CHIPID_STM32_F76xxx) {
-    uint32_t sector = calculate_F7_sectornum(flashaddr);
+    uint32_t sector = calculate_F7_sectornum(sl, flashaddr);
 
     if (sector < 4) {
       sl->flash_pgsz = 0x8000;
@@ -2799,7 +2883,7 @@ int stlink_erase_flash_page(stlink_t *sl, stm32_addr_t flashaddr) {
     } else if (sl->chip_id == STLINK_CHIPID_STM32_F7 ||
                sl->chip_id == STLINK_CHIPID_STM32_F76xxx) {
       // calculate the actual page from the address
-      uint32_t sector = calculate_F7_sectornum(flashaddr);
+      uint32_t sector = calculate_F7_sectornum(sl, flashaddr);
 
       fprintf(stderr, "EraseFlash - Sector:0x%x Size:0x%x ", sector,
               stlink_calculate_pagesize(sl, flashaddr));
