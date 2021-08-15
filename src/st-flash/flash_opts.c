@@ -195,8 +195,6 @@ int flash_get_opts(struct flash_opts* o, int ac, char** av) {
             o->connect = CONNECT_UNDER_RESET;
         } else if (strcmp(av[0], "--hot-plug") == 0) {
             o->connect = CONNECT_HOT_PLUG;
-        } else if (strcmp(av[0], "--dual-bank") == 0) {
-            o->dual_bank = true;
         } else {
             break; // non-option found
 
