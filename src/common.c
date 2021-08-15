@@ -292,6 +292,9 @@
    (1 << FLASH_F7_SR_PGA_ERR) | (1 << FLASH_F7_SR_WRP_ERR) |                   \
    (1 << FLASH_F7_SR_OP_ERR))
 
+// F7 FLASH option register
+#define STM32F7_FLASH_OPTCR_DBANK (29) /* FLASH_OPTRCR Dual Bank Mode */
+
 // STM32F4
 #define FLASH_F4_REGS_ADDR ((uint32_t)0x40023c00)
 #define FLASH_F4_KEYR (FLASH_F4_REGS_ADDR + 0x04)
@@ -529,7 +532,9 @@ static inline unsigned int is_flash_locked(stlink_t *sl) {
     return (-1);
   }
 
+
   stlink_read_debug32(sl, cr_reg, &n);
+  printf("%s cr_reg=%#x lock=%#x reg=%#x\n", __FUNCTION__, cr_reg, cr_lock_shift, n);
   return (n & (1u << cr_lock_shift));
 }
 
@@ -1662,6 +1667,18 @@ int stlink_load_device_params(stlink_t *sl) {
     if (!(flash_optr & (1 << STM32G4_FLASH_OPTR_DBANK))) {
       sl->flash_pgsz <<= 1;
     }
+  }
+
+  if (sl->chip_id == STLINK_CHIPID_STM32_F76xxx) {
+    // Check the nDBANK bit in OPTCR
+    uint32_t optcr;
+    stlink_read_option_control_register32(sl, & optcr);
+
+    if (!(optcr & (1 << STM32F7_FLASH_OPTCR_DBANK)))
+    {
+        sl->dual_bank = true;
+    }
+    DLOG("*** stm32f76xx dual-bank %d ***\n", sl->dual_bank);
   }
 
   // H7 devices with small flash has one bank
