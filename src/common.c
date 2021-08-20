@@ -532,9 +532,7 @@ static inline unsigned int is_flash_locked(stlink_t *sl) {
     return (-1);
   }
 
-
   stlink_read_debug32(sl, cr_reg, &n);
-  printf("%s cr_reg=%#x lock=%#x reg=%#x\n", __FUNCTION__, cr_reg, cr_lock_shift, n);
   return (n & (1u << cr_lock_shift));
 }
 
