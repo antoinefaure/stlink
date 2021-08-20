@@ -243,7 +243,7 @@ struct _stlink {
 
     uint32_t max_trace_freq;     // set by stlink_open_usb()
 
-    bool dual_bank;
+    bool dual_bank;              // set for F7xx devices by reading optcr
 };
 
 int stlink_enter_swd_mode(stlink_t *sl);
