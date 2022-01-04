@@ -1,13 +1,14 @@
-# Chip-ID file for F401xD/E
+# Chip-ID file for STM32F401xD/E device
 #
-chip_id 0x433
-description F401xD/E
-flash_type 3
-flash_pagesize 0x4000
-sram_size 0x18000
+dev_type STM32F401xD/E device
+ref_manual_id 0368
+chip_id 0x433                // STLINK_CHIPID_STM32_F4_DE
+flash_type 3                 // STLINK_FLASH_TYPE_F4
+flash_size_reg 0x1fff7a22
+flash_pagesize 0x4000        // 16 KB
+sram_size 0x18000            // 96 KB
 bootrom_base 0x1fff0000
-bootrom_size 0x7800
+bootrom_size 0x7800          // 30 KB
 option_base 0x0
 option_size 0x0
 flags swo
-

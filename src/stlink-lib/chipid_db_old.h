@@ -7,80 +7,6 @@
 
 static struct stlink_chipid_params devices[] = {
     {
-        // STM32F4x5/F4x7
-        // RM0090 (rev 2)
-        .chip_id = STLINK_CHIPID_STM32_F4,
-        .dev_type = "F4x5/F4x7",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x30000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .option_base = STM32_F4_OPTION_BYTES_BASE,
-        .option_size = 4,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F46x/F47x
-        // RM0090 (rev 2)
-        .chip_id = STLINK_CHIPID_STM32_F4_DSI,
-        .dev_type = "F46x/F47x",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x40000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F42x/F43x
-        // RM0090 (rev 2)
-        .chip_id = STLINK_CHIPID_STM32_F4_HD,
-        .dev_type = "F42x/F43x",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x40000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        .chip_id = STLINK_CHIPID_STM32_F4_LP,
-        .dev_type = "F401xB/C",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x10000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        .chip_id = STLINK_CHIPID_STM32_F411xx,
-        .dev_type = "F411xC/E",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x20000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        .chip_id = STLINK_CHIPID_STM32_F4_DE,
-        .dev_type = "F401xD/E",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x18000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
         // STM32L100/L15x/L16x Cat.1
         // RM0038
         .chip_id = STLINK_CHIPID_STM32_L1_MD,
@@ -145,62 +71,6 @@ static struct stlink_chipid_params devices[] = {
         .sram_size = 0x14000, // up to 80k
         .bootrom_base = 0x1ff00000,
         .bootrom_size = 0x1000,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F446x family
-        // RM0390
-        .chip_id = STLINK_CHIPID_STM32_F446,
-        .dev_type = "F446",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1fff7a22,
-        .flash_pagesize = 0x20000,
-        .sram_size = 0x20000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .option_base = 0x1FFFC000,
-        .option_size = 4,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F410
-        // RM0401
-        .chip_id = STLINK_CHIPID_STM32_F410,
-        .dev_type = "F410",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1fff7a22,
-        .flash_pagesize = 0x4000,
-        .sram_size = 0x8000,
-        .bootrom_base = 0x1fff0000,
-        .bootrom_size = 0x7800,
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F412
-        // RM0402
-        .chip_id = STLINK_CHIPID_STM32_F412,
-        .dev_type = "F412",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22, // "Flash size data register" (pg1135)
-        .flash_pagesize = 0x4000,     // Table 5. Flash module organization ?
-        .sram_size = 0x40000,         // "SRAM" byte size in hex from Table 4
-        .bootrom_base = 0x1FFF0000,   // "System memory" starting address from Table 4
-        .bootrom_size = 0x7800, // "System memory" byte size in hex from Table 4
-        .flags = CHIP_F_HAS_SWO_TRACING,
-    },
-    {
-        // STM32F413/F423
-        // RM0430 (rev 2)
-        .chip_id = STLINK_CHIPID_STM32_F413,
-        .dev_type = "F413/F423",
-        .flash_type = STLINK_FLASH_TYPE_F4,
-        .flash_size_reg = 0x1FFF7A22, // "Flash size data register" Section 35.2
-        .flash_pagesize = 0x4000, // Table 5. Flash module organization (variable sector
-                                  // sizes, but 0x4000 is smallest)
-        .sram_size = 0x50000, // "SRAM" byte size in hex from Figure 2 (Table 4
-                              // only says 0x40000)
-        .bootrom_base = 0x1FFF0000, // "System memory" starting address from Table 4
-        .bootrom_size = 0x7800, // "System memory" byte size in hex from Table 4
         .flags = CHIP_F_HAS_SWO_TRACING,
     },
     {
@@ -751,6 +621,136 @@ static struct stlink_chipid_params devices[] = {
         .bootrom_size = 0x800,
         .option_base = STM32_F0_OPTION_BYTES_BASE,
         .option_size = 16,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        .chip_id = STLINK_CHIPID_STM32_F4_LP,
+        .dev_type = "F401xB/C",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x10000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        .chip_id = STLINK_CHIPID_STM32_F4_DE,
+        .dev_type = "F401xD/E",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x18000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F410
+        // RM0401
+        .chip_id = STLINK_CHIPID_STM32_F410,
+        .dev_type = "F410",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1fff7a22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x8000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        .chip_id = STLINK_CHIPID_STM32_F411xx,
+        .dev_type = "F411xC/E",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x20000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F412
+        // RM0402
+        .chip_id = STLINK_CHIPID_STM32_F412,
+        .dev_type = "F412",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22, // "Flash size data register" (pg1135)
+        .flash_pagesize = 0x4000,     // Table 5. Flash module organization ?
+        .sram_size = 0x40000,         // "SRAM" byte size in hex from Table 4
+        .bootrom_base = 0x1FFF0000,   // "System memory" starting address from Table 4
+        .bootrom_size = 0x7800, // "System memory" byte size in hex from Table 4
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F413/F423
+        // RM0430 (rev 2)
+        .chip_id = STLINK_CHIPID_STM32_F413,
+        .dev_type = "F413/F423",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22, // "Flash size data register" Section 35.2
+        .flash_pagesize = 0x4000, // Table 5. Flash module organization (variable sector
+                                  // sizes, but 0x4000 is smallest)
+        .sram_size = 0x50000, // "SRAM" byte size in hex from Figure 2 (Table 4
+                              // only says 0x40000)
+        .bootrom_base = 0x1FFF0000, // "System memory" starting address from Table 4
+        .bootrom_size = 0x7800, // "System memory" byte size in hex from Table 4
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F42x/F43x
+        // RM0090 (rev 2)
+        .chip_id = STLINK_CHIPID_STM32_F4_HD,
+        .dev_type = "F42x/F43x",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x40000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F446x family
+        // RM0390
+        .chip_id = STLINK_CHIPID_STM32_F446,
+        .dev_type = "F446",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1fff7a22,
+        .flash_pagesize = 0x20000,
+        .sram_size = 0x20000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .option_base = 0x1FFFC000,
+        .option_size = 4,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F46x/F47x
+        // RM0090 (rev 2)
+        .chip_id = STLINK_CHIPID_STM32_F4_DSI,
+        .dev_type = "F46x/F47x",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x40000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .flags = CHIP_F_HAS_SWO_TRACING,
+    },
+    {
+        // STM32F4x5/F4x7
+        // RM0090 (rev 2)
+        .chip_id = STLINK_CHIPID_STM32_F4,
+        .dev_type = "F4x5/F4x7",
+        .flash_type = STLINK_FLASH_TYPE_F4,
+        .flash_size_reg = 0x1FFF7A22,
+        .flash_pagesize = 0x4000,
+        .sram_size = 0x30000,
+        .bootrom_base = 0x1fff0000,
+        .bootrom_size = 0x7800,
+        .option_base = STM32_F4_OPTION_BYTES_BASE,
+        .option_size = 4,
         .flags = CHIP_F_HAS_SWO_TRACING,
     },
     {
